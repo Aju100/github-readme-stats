@@ -5,11 +5,11 @@ const {
   parseBoolean,
   parseArray,
   CONSTANTS,
-  isLocaleAvailable,
 } = require("../src/common/utils");
 const fetchTopLanguages = require("../src/fetchers/top-languages-fetcher");
 const renderTopLanguages = require("../src/cards/top-languages-card");
 const blacklist = require("../src/common/blacklist");
+const { isLocaleAvailable } = require("../src/translations");
 
 module.exports = async (req, res) => {
   const {
@@ -28,6 +28,8 @@ module.exports = async (req, res) => {
     exclude_repo,
     custom_title,
     locale,
+    border_radius,
+    border_color,
   } = req.query;
   let topLangs;
 
@@ -44,8 +46,8 @@ module.exports = async (req, res) => {
   try {
     topLangs = await fetchTopLanguages(
       username,
-      langs_count,
       parseArray(exclude_repo),
+      parseArray(hide),
     );
 
     const cacheSeconds = clampValue(
@@ -68,6 +70,9 @@ module.exports = async (req, res) => {
         bg_color,
         theme,
         layout,
+        langs_count,
+        border_radius,
+        border_color,
         locale: locale ? locale.toLowerCase() : null,
       }),
     );
